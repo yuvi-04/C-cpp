@@ -248,6 +248,38 @@ public:
         }
         return maxWidth;
     }
+    Node* mirrorImage(Node* p)
+    {
+        if(p == NULL)
+            return NULL;
+        else
+        {
+            Node* temp = new Node(p->info);
+            temp->left = mirrorImage(p->right);
+            temp->right = mirrorImage(p->left);
+            return temp;
+        }
+    }
+    bool isEqual(Node* r1,Node* r2)
+    {
+        if(r1 == NULL && r2 == NULL)
+            return true;
+        if(r1 != NULL && r2 != NULL)
+        {
+            return (r1->info == r2->info
+                && isEqual(r1->left,r2->left)
+                && isEqual(r1->right,r2->right));
+        }
+        return false;
+    }
+    bool isMirrorImage(Node* p,Node* q)
+    {
+        if(p == NULL && q == NULL)
+            return true;
+        if(p && q && p->info == q->info)
+            return (isMirrorImage(p->left,q->right) && isMirrorImage(p->right,q->left));
+        return false;
+    }
 };
 int main()
 {
@@ -255,6 +287,12 @@ int main()
     b.insert(80); b.insert(10); b.insert(100); b.insert(9); b.insert(22);
     b.insert(96); b.insert(120); b.insert(4); b.insert(18);
     b.insert(40); b.insert(101); b.insert(125); b.insert(12);
+
+    BSTlinkList b1;
+    b1.insert(80); b1.insert(10); b1.insert(100); b1.insert(9); b1.insert(22);
+    b1.insert(96); b1.insert(120); b1.insert(4); b1.insert(18);
+    b1.insert(40); b1.insert(101); b1.insert(125); b1.insert(12);
+
 
     cout<<"INORDER : ";
     b.inOrder(b.root);
@@ -290,4 +328,21 @@ int main()
 
     cout<<"MAX WIDTH OF TREE : "<<b.maxWidth(b.root);
     cout<<endl;
+
+    Node* mirror = b.mirrorImage(b.root);
+    cout<<"MIRROR IMAGE : ";
+    b.inOrder(mirror);
+    cout<<endl;
+
+    bool test = b.isEqual(b.root,mirror);
+    if(test == true)
+        cout<<"TREES ARE EQUAL"<<endl;
+    else
+        cout<<"trees are not equal"<<endl;
+
+    bool isMirror = b.isMirrorImage(b.root,mirror);
+    if(isMirror)
+        cout<<"MIRROR IMAGE CONFIRMED";
+    else
+        cout<<"NOT A MIRROR IMAGE";
 }
